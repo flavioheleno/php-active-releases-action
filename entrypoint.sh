@@ -4,13 +4,10 @@ set -o errexit
 set -o noglob
 set -o nounset
 
-wget \
-  --quiet \
-  --tries=3 \
-  --output-document=php.json \
-  --waitretry=1 \
-  --unlink \
-  --compression=auto \
+curl \
+  --fail \
+  --output php.json \
+  --silent \
   "https://www.php.net/releases/active.php" \
   && EXIT_CODE=$? || EXIT_CODE=$?
 

@@ -3,6 +3,7 @@ FROM alpine:3.20
 ARG VERSION=latest
 
 RUN apk add --no-cache \
+    curl=8.7.1-r0 \
     jq=1.7.1-r0
 
 COPY entrypoint.sh /entrypoint.sh
