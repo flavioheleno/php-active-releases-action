@@ -1,20 +1,21 @@
-name: 'php-release-matrix'
-description: 'This action creates a build matrix based on the latest PHP Releases available'
+name: 'php-active-releases-action'
+description: 'This action retrieves a list of active PHP Releases'
 author: 'Flavio Heleno <flaviohbatista@gmail.com>'
 
 branding:
   icon: 'activity'
   color: 'black'
 
-inputs:
-  format:
-    description: 'Output format, "short" for versions only or "long" for additional information'
-    required: true
-
 outputs:
-  version:
-    description: 'List of releases details'
+  major:
+    description: The list of major versions available, as a list of strings (string[])
+  minor:
+    description: The list of minor versions available, as a list of strings (string[])
+  patch:
+    description: The list of patch versions available, as a list of strings (string[])
+  release:
+    description: The list of releases available, as a list of objects (object[])
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/flavioheleno/php-release-matrix:latest'
+  image: 'docker://ghcr.io/flavioheleno/php-active-releases-action:latest'
