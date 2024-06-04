@@ -1,0 +1,20 @@
+name: 'php-release-matrix'
+description: 'This action creates a build matrix based on the latest PHP Releases available'
+author: 'Flavio Heleno <flaviohbatista@gmail.com>'
+
+branding:
+  icon: 'activity'
+  color: 'black'
+
+inputs:
+  format:
+    description: 'Output format, "short" for versions only or "long" for additional information'
+    required: true
+
+outputs:
+  version:
+    description: 'List of releases details'
+
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/flavioheleno/php-release-matrix:latest'
