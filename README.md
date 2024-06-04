@@ -97,7 +97,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.major) }}
+      matrix:
+        major: ${{ fromJson(needs.setup.outputs.major) }}
 
     steps:
       - run: echo ${{ matrix.major }}
@@ -130,7 +131,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.minor) }}
+      matrix:
+        minor: ${{ fromJson(needs.setup.outputs.minor) }}
 
     steps:
       - run: echo ${{ matrix.minor }}
@@ -163,7 +165,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.patch) }}
+      matrix:
+        patch: ${{ fromJson(needs.setup.outputs.patch) }}
 
     steps:
       - run: echo ${{ matrix.patch }}
@@ -198,7 +201,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.release) }}
+      matrix:
+        release: ${{ fromJson(needs.setup.outputs.release) }}
 
     steps:
       - run: echo ${{ matrix.release.version }}
