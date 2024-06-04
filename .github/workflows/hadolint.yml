@@ -1,6 +1,9 @@
 name: hadolint
 permissions: {}
 on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
   push:
     branches:
       - main
