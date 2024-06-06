@@ -26,6 +26,27 @@ The list of minor versions available, as a list of strings (`string[]`), for exa
 ]
 ```
 
+### `minor-split`
+
+The list of minor versions available, as a list of objects (`object[]`), for example:
+
+```json
+[
+  {
+    "major": "8",
+    "minor": "1"
+  },
+  {
+    "major": "8",
+    "minor": "2"
+  },
+  {
+    "major": "8",
+    "minor": "3"
+  }
+]
+```
+
 ### `patch`
 
 The list of patch versions available, as a list of strings (`string[]`), for example:
@@ -35,6 +56,30 @@ The list of patch versions available, as a list of strings (`string[]`), for exa
   "8.1.28",
   "8.2.19",
   "8.3.7"
+]
+```
+
+### `patch-split`
+
+The list of patch versions available, as a list of objects (`object[]`), for example:
+
+```json
+[
+  {
+    "major": "8",
+    "minor": "1",
+    "patch": "28"
+  },
+  {
+    "major": "8",
+    "minor": "2",
+    "patch": "19"
+  },
+  {
+    "major": "8",
+    "minor": "3",
+    "patch": "7"
+  }
 ]
 ```
 
@@ -104,6 +149,12 @@ jobs:
       - run: echo ${{ matrix.major }}
 ```
 
+**Sample Output**
+
+```shell
+8
+```
+
 ### Using "minor"
 
 ```yaml
@@ -136,6 +187,56 @@ jobs:
 
     steps:
       - run: echo ${{ matrix.minor }}
+```
+
+**Sample Output**
+
+```shell
+8.1
+8.2
+8.3
+```
+
+### Using "minor-split"
+
+```yaml
+name: PHP Building
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  setup:
+    name: Generate build matrix
+    runs-on: ubuntu-latest
+
+    outputs:
+      split: ${{ steps.releases.outputs.minor-split }}
+
+    steps:
+      - id: releases
+        name: Get PHP Releases
+        uses: flavioheleno/php-active-releases-action@main
+
+  build:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.setup.outputs.split) }}
+
+    steps:
+      - run: echo ${{ matrix.version.major }}.${{ matrix.version.minor }}
+```
+
+**Sample Output**
+
+```shell
+8.1
+8.2
+8.3
 ```
 
 ### Using "patch"
@@ -172,6 +273,56 @@ jobs:
       - run: echo ${{ matrix.patch }}
 ```
 
+**Sample Output**
+
+```shell
+8.1.28
+8.2.19
+8.3.7
+```
+
+### Using "patch-split"
+
+```yaml
+name: PHP Building
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  setup:
+    name: Generate build matrix
+    runs-on: ubuntu-latest
+
+    outputs:
+      split: ${{ steps.releases.outputs.patch-split }}
+
+    steps:
+      - id: releases
+        name: Get PHP Releases
+        uses: flavioheleno/php-active-releases-action@main
+
+  build:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.setup.outputs.split) }}
+
+    steps:
+      - run: echo ${{ matrix.version.major }}.${{ matrix.version.minor }}.${{ matrix.version.patch }}
+```
+
+**Sample Output**
+
+```shell
+8.1.28
+8.2.19
+8.3.7
+```
+
 ### Using "release"
 
 ```yaml
@@ -205,7 +356,15 @@ jobs:
         release: ${{ fromJson(needs.setup.outputs.release) }}
 
     steps:
-      - run: echo ${{ matrix.release.version }}
+      - run: echo ${{ matrix.release.name }}
+```
+
+**Sample Output**
+
+```shell
+PHP 8.1.28 (tar.gz)
+PHP 8.2.19 (tar.gz)
+PHP 8.3.7 (tar.gz)
 ```
 
 ## License

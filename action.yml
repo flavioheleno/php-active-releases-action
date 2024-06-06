@@ -11,8 +11,12 @@ outputs:
     description: The list of major versions available, as a list of strings (string[])
   minor:
     description: The list of minor versions available, as a list of strings (string[])
+  minor-split:
+    description: The list of minor versions available, as a list of objects (object[])
   patch:
     description: The list of patch versions available, as a list of strings (string[])
+  patch-split:
+    description: The list of patch versions available, as a list of objects (object[])
   release:
     description: The list of releases available, as a list of objects (object[])
 
