@@ -4,9 +4,6 @@ set -o errexit
 set -o noglob
 set -o nounset
 
-GITHUB_STEP_SUMMARY=summary
-GITHUB_OUTPUT=output
-
 curl \
   --fail \
   --output php.json \
