@@ -79,16 +79,44 @@ fi
 
 echo "patch-split=$(cat patch-split.json)" >> "$GITHUB_OUTPUT"
 
-##########
-## RELEASE
-##########
+#############
+## RELEASE-GZ
+#############
 
-jq --compact-output '[ .[][] | { version: .version } + .source[0] ]' php.json > release.json 2> /dev/null \
+jq --compact-output '[ .[][] | { version: .version } + .source[0] ]' php.json > release-gz.json 2> /dev/null \
 && EXIT_CODE=$? || EXIT_CODE=$?
 if [ "${EXIT_CODE}" -ne 0 ]; then
-  echo "Failed to extract release list" >> "$GITHUB_STEP_SUMMARY"
+  echo "Failed to extract release-gz list" >> "$GITHUB_STEP_SUMMARY"
 
   exit "${EXIT_CODE}"
 fi
 
-echo "release=$(cat release.json)" >> "$GITHUB_OUTPUT"
+echo "release-gz=$(cat release-gz.json)" >> "$GITHUB_OUTPUT"
+
+##############
+## RELEASE-BZ2
+##############
+
+jq --compact-output '[ .[][] | { version: .version } + .source[1] ]' php.json > release-bz2.json 2> /dev/null \
+&& EXIT_CODE=$? || EXIT_CODE=$?
+if [ "${EXIT_CODE}" -ne 0 ]; then
+  echo "Failed to extract release-bz2 list" >> "$GITHUB_STEP_SUMMARY"
+
+  exit "${EXIT_CODE}"
+fi
+
+echo "release-bz2=$(cat release-bz2.json)" >> "$GITHUB_OUTPUT"
+
+#############
+## RELEASE-XZ
+#############
+
+jq --compact-output '[ .[][] | { version: .version } + .source[2] ]' php.json > release-xz.json 2> /dev/null \
+&& EXIT_CODE=$? || EXIT_CODE=$?
+if [ "${EXIT_CODE}" -ne 0 ]; then
+  echo "Failed to extract release-xz list" >> "$GITHUB_STEP_SUMMARY"
+
+  exit "${EXIT_CODE}"
+fi
+
+echo "release-xz=$(cat release-xz.json)" >> "$GITHUB_OUTPUT"

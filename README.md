@@ -83,9 +83,9 @@ The list of patch versions available, as a list of objects (`object[]`), for exa
 ]
 ```
 
-### `release`
+### `release-gz`
 
-The list of releases available, as a list of objects (`object[]`), for example:
+The list of ".tar.gz" releases available, as a list of objects (`object[]`), for example:
 
 ```json
 [
@@ -108,6 +108,66 @@ The list of releases available, as a list of objects (`object[]`), for example:
     "filename": "php-8.3.7.tar.gz",
     "name": "PHP 8.3.7 (tar.gz)",
     "sha256": "2e11d10b651459a8767401e66b5d70e3b048e446579fcdeb0b69bcba789af8c4",
+    "date": "09 May 2024"
+  }
+]
+```
+
+### `release-bz2`
+
+The list of ".tar.bz2" releases available, as a list of objects (`object[]`), for example:
+
+```json
+[
+  {
+    "version": "8.1.28",
+    "filename": "php-8.1.28.tar.bz2",
+    "name": "PHP 8.1.28 (tar.bz2)",
+    "sha256": "8be450096e0153c47d75384e7dd595cc897f1d53ce0060708ce9589bcc3141ee",
+    "date": "11 Apr 2024"
+  },
+  {
+    "version": "8.2.19",
+    "filename": "php-8.2.19.tar.bz2",
+    "name": "PHP 8.2.19 (tar.bz2)",
+    "sha256": "3c18f7ce51b7c7b26b797e1f97079d386b30347eb04e817f5e6c8e9b275e2a6a",
+    "date": "09 May 2024"
+  },
+  {
+    "version": "8.3.7",
+    "filename": "php-8.3.7.tar.bz2",
+    "name": "PHP 8.3.7 (tar.bz2)",
+    "sha256": "01c20cde1c5a5696651875ed22f507849679fba740f8c421616b7d43d7f797da",
+    "date": "09 May 2024"
+  }
+]
+```
+
+### `release-xz`
+
+The list of ".tar.xz" releases available, as a list of objects (`object[]`), for example:
+
+```json
+[
+  {
+    "version": "8.1.28",
+    "filename": "php-8.1.28.tar.xz",
+    "name": "PHP 8.1.28 (tar.xz)",
+    "sha256": "95d0b2e9466108fd750dab5c30a09e5c67f5ad2cb3b1ffb3625a038a755ad080",
+    "date": "11 Apr 2024"
+  },
+  {
+    "version": "8.2.19",
+    "filename": "php-8.2.19.tar.xz",
+    "name": "PHP 8.2.19 (tar.xz)",
+    "sha256": "aecd63f3ebea6768997f5c4fccd98acbf897762ed5fc25300e846197a9485c13",
+    "date": "09 May 2024"
+  },
+  {
+    "version": "8.3.7",
+    "filename": "php-8.3.7.tar.xz",
+    "name": "PHP 8.3.7 (tar.xz)",
+    "sha256": "d53433c1ca6b2c8741afa7c524272e6806c1e895e5912a058494fea89988570a",
     "date": "09 May 2024"
   }
 ]
@@ -323,7 +383,7 @@ jobs:
 8.3.7
 ```
 
-### Using "release"
+### Using "release-gz"
 
 ```yaml
 name: PHP Building
@@ -353,7 +413,7 @@ jobs:
     needs: setup
     strategy:
       matrix:
-        release: ${{ fromJson(needs.setup.outputs.release) }}
+        release: ${{ fromJson(needs.setup.outputs.release-gz) }}
 
     steps:
       - run: echo ${{ matrix.release.name }}
@@ -365,6 +425,94 @@ jobs:
 PHP 8.1.28 (tar.gz)
 PHP 8.2.19 (tar.gz)
 PHP 8.3.7 (tar.gz)
+```
+
+### Using "release-bz2"
+
+```yaml
+name: PHP Building
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  setup:
+    name: Generate build matrix
+    runs-on: ubuntu-latest
+
+    outputs:
+      release: ${{ steps.releases.outputs.release }}
+
+    steps:
+      - id: releases
+        name: Get PHP Releases
+        uses: flavioheleno/php-active-releases-action@main
+        with:
+          format: short
+
+  build:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        release: ${{ fromJson(needs.setup.outputs.release-bz2) }}
+
+    steps:
+      - run: echo ${{ matrix.release.name }}
+```
+
+**Sample Output**
+
+```shell
+PHP 8.1.28 (tar.bz2)
+PHP 8.2.19 (tar.bz2)
+PHP 8.3.7 (tar.bz2)
+```
+
+### Using "release-xz"
+
+```yaml
+name: PHP Building
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  setup:
+    name: Generate build matrix
+    runs-on: ubuntu-latest
+
+    outputs:
+      release: ${{ steps.releases.outputs.release }}
+
+    steps:
+      - id: releases
+        name: Get PHP Releases
+        uses: flavioheleno/php-active-releases-action@main
+        with:
+          format: short
+
+  build:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        release: ${{ fromJson(needs.setup.outputs.release-xz) }}
+
+    steps:
+      - run: echo ${{ matrix.release.name }}
+```
+
+**Sample Output**
+
+```shell
+PHP 8.1.28 (tar.xz)
+PHP 8.2.19 (tar.xz)
+PHP 8.3.7 (tar.xz)
 ```
 
 ## License

@@ -17,8 +17,12 @@ outputs:
     description: The list of patch versions available, as a list of strings (string[])
   patch-split:
     description: The list of patch versions available, as a list of objects (object[])
-  release:
-    description: The list of releases available, as a list of objects (object[])
+  release-gz:
+    description: The list of ".tar.gz" releases available, as a list of objects (object[])
+  release-bz2:
+    description: The list of ".tar.bz2" releases available, as a list of objects (object[])
+  release-xz:
+    description: The list of ".tar.xz" releases available, as a list of objects (object[])
 
 runs:
   using: 'docker'
